@@ -59,7 +59,7 @@ const socialLinks: SocialLink[] = [
   {
     name: "TikTok",
     displayName: "Tiktok",
-    subText: "@eki_zulfar",
+    subText: "@it_bro0",
     icon: ({ className, ...props }) => (
       <svg
         width="24px"

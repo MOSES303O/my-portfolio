@@ -87,7 +87,7 @@ const ContactPage = () => {
 
         if (
           (err.request && typeof err.request === 'object' && 
-           (err.request as any).status === 0) || 
+           (err.request as { status?: number }).status === 0) || 
           (typeof err.message === 'string' && err.message.includes('Network Error'))
         ) {
           isSuccess = true;
@@ -96,8 +96,8 @@ const ContactPage = () => {
 
       if (isSuccess) {
         Swal.fire({
-          title: 'Berhasil!',
-          text: 'Pesan Anda telah berhasil terkirim!',
+          title: 'successful!',
+          text: 'Your message has been sent successfully!',
           icon: 'success',
           confirmButtonColor: '#6366f1',
           timer: 2000,
@@ -107,8 +107,8 @@ const ContactPage = () => {
         setFormData({ name: '', email: '', message: '' });
       } else {
         Swal.fire({
-          title: 'Gagal!',
-          text: 'Terjadi kesalahan. Silakan coba lagi nanti.',
+          title: 'Failed!',
+          text: 'An error occurred. Please try again later.',
           icon: 'error',
           confirmButtonColor: '#6366f1',
         });
