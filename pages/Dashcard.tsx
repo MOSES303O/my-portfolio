@@ -4,9 +4,9 @@ import { useState,useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { FolderGit2, Award, MessageSquare, LogOut, LayoutDashboard, Menu } from 'lucide-react';
 
-import Projects from '@/pages/dashboard/Projects';
-import Certificates from '@/pages/dashboard/Certificates';
-import Comments from '@/pages/dashboard/Comments';
+import Projects from '@/pages/Dashboard/Projects';
+import Certificates from '@/pages/Dashboard/Certificates';
+import Comments from '@/pages/Dashboard/Comments';
 
 const NAV_ITEMS = [
   { id: 'projects', label: 'Projects', icon: FolderGit2 },
