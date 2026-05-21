@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { Linkedin, Github, Instagram, Youtube, ExternalLink } from 'lucide-react';
+import { FaGithub,FaInstagram } from "react-icons/fa6";
+import { Tv, ExternalLink } from 'lucide-react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import PresenceWidget from './PresenceWidget';
@@ -10,7 +11,7 @@ interface SocialLink {
   name: string;
   displayName: string;
   subText: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   url: string;
   color: string;
   gradient: string;
@@ -22,8 +23,8 @@ const socialLinks: SocialLink[] = [
     name: "LinkedIn",
     displayName: "Let's Connect",
     subText: "on LinkedIn",
-    icon: Linkedin,
-    url: "https://www.linkedin.com/in/ekizr/",
+    icon: FaGithub,
+    url: "https://www.linkedin.com/in/moses-ochieng-95abb43ba/",
     color: "#0A66C2",
     gradient: "from-[#0A66C2] to-[#0077B5]",
     isPrimary: true,
@@ -31,27 +32,27 @@ const socialLinks: SocialLink[] = [
   {
     name: "Instagram",
     displayName: "Instagram",
-    subText: "@ekizr_",
-    icon: Instagram,
-    url: "https://www.instagram.com/ekizr_/?hl=id",
+    subText: "@ochiengs",
+    icon: FaInstagram,
+    url: "https://www.instagram.com/mose_ceo001/",
     color: "#E4405F",
     gradient: "from-[#833AB4] via-[#E4405F] to-[#FCAF45]",
   },
   {
     name: "YouTube",
     displayName: "Youtube",
-    subText: "@eki zulfar",
-    icon: Youtube,
-    url: "https://www.youtube.com/@eki_zulfar",
+    subText: "",
+    icon: Tv,
+    url: "https://www.youtube.com/ochiengs",
     color: "#FF0000",
     gradient: "from-[#FF0000] to-[#CC0000]",
   },
   {
     name: "GitHub",
     displayName: "Github",
-    subText: "@EkiZR",
-    icon: Github,
-    url: "https://github.com/EkiZR",
+    subText: "@MOSES303O",
+    icon: FaGithub,
+    url: "https://github.com/MOSES303O",
     color: "#ffffff",
     gradient: "from-[#333] to-[#24292e]",
   },
@@ -65,6 +66,7 @@ const socialLinks: SocialLink[] = [
         height="24px"
         viewBox="0 0 45 45"
         xmlns="http://www.w3.org/2000/svg"
+        className={className}
         {...props}
       >
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
@@ -81,7 +83,7 @@ const socialLinks: SocialLink[] = [
         </g>
       </svg>
     ),
-    url: "https://tiktok.com/@eki_zulfar",
+    url: "https://tiktok.com/@it_bro0",
     color: "#000000",
     gradient: "from-[#000000] via-[#25F4EE] to-[#FE2C55]",
   },

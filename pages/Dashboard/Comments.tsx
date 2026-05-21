@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   MessageSquare, Pin, Trash2, PinOff, Calendar, Search, X, 
   ChevronLeft, ChevronRight 
@@ -28,43 +28,37 @@ const Card = ({ children, className = '' }: { children: React.ReactNode; classNa
 );
 
 export default function Comments() {
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [comments] = useState<Comment[]>([
+    {
+      id: 1,
+      user_name: "Alex Chen",
+      content: "This portfolio is absolutely stunning! The animations and design are top tier.",
+      profile_image: "",
+      created_at: "2025-05-10T10:00:00Z",
+      is_pinned: true,
+    },
+    {
+      id: 2,
+      user_name: "Sarah Williams",
+      content: "Really clean code and beautiful UI. Keep up the great work!",
+      profile_image: "",
+      created_at: "2025-05-09T14:30:00Z",
+      is_pinned: false,
+    },
+    {
+      id: 3,
+      user_name: "Michael Rodriguez",
+      content: "The project details page is very well designed. Love the smooth animations.",
+      profile_image: "",
+      created_at: "2025-05-08T09:15:00Z",
+      is_pinned: false,
+    },
+
+  ]);
   const [filter, setFilter] = useState<'all' | 'pinned'>('all');
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
 
-  // Mock Data
-  useEffect(() => {
-    const mockComments: Comment[] = [
-      {
-        id: 1,
-        user_name: "Alex Chen",
-        content: "This portfolio is absolutely stunning! The animations and design are top tier.",
-        profile_image: "",
-        created_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-        is_pinned: true,
-      },
-      {
-        id: 2,
-        user_name: "Sarah Williams",
-        content: "Really clean code and beautiful UI. Keep up the great work!",
-        profile_image: "",
-        created_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-        is_pinned: false,
-      },
-      {
-        id: 3,
-        user_name: "Michael Rodriguez",
-        content: "The project details page is very well designed. Love the smooth animations.",
-        profile_image: "",
-        created_at: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-        is_pinned: false,
-      },
-    ];
-    setComments(mockComments);
-    setLoading(false);
-  }, []);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -76,14 +70,15 @@ export default function Comments() {
   };
 
   const pinComment = (id: number, value: boolean) => {
-    setComments(prev => 
-      prev.map(c => c.id === id ? { ...c, is_pinned: value } : c)
-    );
+    // For now, just log (you can implement real update later)
+    console.log(`Pin comment ${id} to ${value}`);
   };
+
 
   const deleteComment = (id: number) => {
     if (!confirm('Delete this comment?')) return;
-    setComments(prev => prev.filter(c => c.id !== id));
+    // For mock: you can add real delete logic here later
+    console.log(`Delete comment ${id}`);
   };
 
   // Filter + Search
@@ -170,11 +165,7 @@ export default function Comments() {
       </div>
 
       {/* Comments List */}
-      {loading ? (
-        <div className="flex justify-center py-20">
-          <div className="w-8 h-8 border-4 border-white/10 border-t-indigo-500 rounded-full animate-spin" />
-        </div>
-      ) : paginated.length === 0 ? (
+      {paginated.length === 0 ? (
         <Card>
           <div className="p-20 text-center">
             <MessageSquare className="w-12 h-12 text-gray-600 mx-auto mb-4" />
@@ -193,9 +184,7 @@ export default function Comments() {
                     {comment.profile_image ? (
                       <Image src={comment.profile_image} alt="" className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-indigo-400">
-                        👤
-                      </div>
+                      <div className="w-full h-full flex items-center justify-center text-indigo-400 text-xl">👤</div>
                     )}
                   </div>
 
@@ -204,7 +193,7 @@ export default function Comments() {
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-white">{comment.user_name}</span>
                         {comment.is_pinned && (
-                          <span className="px-2 py-0.5 text-xs bg-indigo-500/20 text-indigo-300 rounded-full flex items-center gap-1">
+                          <span className="px-2 py-0.5 text-xs bg-indigo-500/15 border border-indigo-500/25 text-indigo-300 rounded-full flex items-center gap-1">
                             <Pin className="w-3 h-3" /> Pinned
                           </span>
                         )}
@@ -220,7 +209,7 @@ export default function Comments() {
                     </p>
                   </div>
 
-                  {/* Actions */}
+                  {/* Action Buttons */}
                   <div className="flex flex-col gap-1">
                     <button
                       onClick={() => pinComment(comment.id, !comment.is_pinned)}

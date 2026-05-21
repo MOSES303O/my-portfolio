@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Code2, Github, Globe, User } from 'lucide-react';
+import { Code2, Globe, User } from 'lucide-react';
+import { FaGithub } from "react-icons/fa6";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -44,7 +45,8 @@ const BackgroundEffect = () => (
   </div>
 );
 
-const IconButton = ({ Icon }: { Icon: React.ComponentType<any> }) => (
+const IconButton = ({ Icon }: {Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+}) => (
   <div className="relative group hover:scale-110 transition-transform duration-300">
     <div className="absolute -inset-2 bg-linear-to-r from-indigo-600 to-purple-600 rounded-full blur opacity-30 group-hover:opacity-75 transition duration-300" />
     <div className="relative p-2 sm:p-3 bg-black/50 backdrop-blur-sm rounded-full border border-white/10">
@@ -52,6 +54,41 @@ const IconButton = ({ Icon }: { Icon: React.ComponentType<any> }) => (
     </div>
   </div>
 );
+
+// ==================== VARIANTS (FIXED) ====================
+
+const containerVariants = {
+  initial: { opacity: 0 },
+  animate: { 
+    opacity: 1,
+    transition: { duration: 0.6, ease: "easeOut" as const }
+  },
+  exit: {
+    opacity: 0,
+    scale: 1.05,
+    filter: 'blur(10px)',
+    transition: {
+      duration: 0.8,
+      ease: "easeInOut" as const,
+      when: "beforeChildren" as const,
+      staggerChildren: 0.1,
+    },
+  },
+} as const;
+
+const childVariants = {
+  initial: { opacity: 0, y: 30 },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" as const }
+  },
+  exit: {
+    opacity: 0,
+    y: -20,
+    transition: { duration: 0.4, ease: "easeInOut" as const },
+  },
+} as const;
 
 // ==================== MAIN COMPONENT ====================
 
@@ -69,43 +106,21 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
       setIsLoading(false);
       setTimeout(() => {
         onLoadingComplete?.();
-      }, 1000);
-    }, 3400);
+      }, 800);
+    }, 6000);
 
     return () => clearTimeout(timer);
   }, [onLoadingComplete]);
 
-  const containerVariants = {
-    exit: {
-      opacity: 0,
-      scale: 1.1,
-      filter: 'blur(10px)',
-      transition: {
-        duration: 0.8,
-        ease: 'easeInOut',
-        when: 'beforeChildren',
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const childVariants = {
-    exit: {
-      y: -20,
-      opacity: 0,
-      transition: { duration: 0.4, ease: 'easeInOut' },
-    },
-  };
-
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isLoading && (
         <motion.div
           className="fixed inset-0 bg-[#030014] z-100"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit="exit"
           variants={containerVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
         >
           <BackgroundEffect />
 
@@ -116,7 +131,7 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
                 className="flex justify-center gap-3 sm:gap-4 md:gap-8 mb-6 sm:mb-8 md:mb-12"
                 variants={childVariants}
               >
-                {[Code2, User, Github].map((Icon, index) => (
+                {[Code2, User, FaGithub].map((Icon, index) => (
                   <div key={index} data-aos="fade-down" data-aos-delay={index * 200}>
                     <IconButton Icon={Icon} />
                   </div>
@@ -179,7 +194,7 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
                 data-aos-delay="1200"
               >
                 <a
-                  href="https://ekizr.com"
+                  href="https://ochiengsenterprise.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full relative group hover:scale-105 transition-transform duration-300"
@@ -188,7 +203,7 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
                   <div className="relative flex items-center gap-2 text-lg sm:text-xl md:text-2xl">
                     <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600" />
                     <span className="bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                      <TypewriterEffect text="ekizr.com" />
+                      <TypewriterEffect text="OchiengsEnterprise.com" />
                     </span>
                   </div>
                 </a>

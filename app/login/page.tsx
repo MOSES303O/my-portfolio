@@ -70,7 +70,7 @@ const Login = () => {
                   <Mail className="w-5 h-5 text-gray-500 ml-4" />
                   <input
                     type="email"
-                    placeholder="admin@ekizr.com"
+                    placeholder="admin@ochiengs.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required

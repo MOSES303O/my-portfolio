@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Fullscreen, X } from 'lucide-react';
 import Image from 'next/image';
 interface CertificateProps {
@@ -25,6 +25,8 @@ const Certificate = ({ ImgSertif }: CertificateProps) => {
           <div className="absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-black/60 z-10 transition-opacity group-hover:opacity-70" />
 
           <Image
+            width={30}
+            height={20}
             src={ImgSertif}
             alt="Certificate"
             className="w-full aspect-16/11.5 object-cover transition-all duration-500 group-hover:scale-105"
@@ -63,6 +65,8 @@ const Certificate = ({ ImgSertif }: CertificateProps) => {
             {/* Full Image */}
             <Image
               src={ImgSertif}
+              width={30}
+              height={20}
               alt="Certificate Full View"
               className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
             />

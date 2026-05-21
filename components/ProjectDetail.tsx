@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect , useMemo, useSyncExternalStore, useState } from 'react';
+import { useEffect , useMemo,useState } from 'react';
 import { useParams,useRouter } from 'next/navigation';
 import Image from 'next/image';
 import {
@@ -100,7 +100,7 @@ const ProjectStats = ({ project }: ProjectStatsProps) => {
         </div>
         <div className="grow">
           <div className="text-lg md:text-xl font-semibold text-blue-200">{techStackCount}</div>
-          <div className="text-[10px] md:text-xs text-gray-400">Total Teknologi</div>
+          <div className="text-[10px] md:text-xs text-gray-400">Total Technologies</div>
         </div>
       </div>
 
@@ -110,44 +110,69 @@ const ProjectStats = ({ project }: ProjectStatsProps) => {
         </div>
         <div className="grow">
           <div className="text-lg md:text-xl font-semibold text-purple-200">{featuresCount}</div>
-          <div className="text-[10px] md:text-xs text-gray-400">Fitur Utama</div>
+          <div className="text-[10px] md:text-xs text-gray-400">Main Features</div>
         </div>
       </div>
     </div>
   );
 };
 
-// ==================== MAIN COMPONENT ====================
-const useLocalStorageProjects = () => {
-  const getSnapshot = () => {
-    if (typeof window === 'undefined') return [];
-    return JSON.parse(localStorage.getItem('projects') || '[]') as Project[];
-  };
+// ==================== LOCAL STORAGE HOOK ====================
+export function useLocalStorageProjects() {
+  const [projects, setProjects] = useState<Project[]>([]);
 
-  return useSyncExternalStore(
-    (callback) => {
-      window.addEventListener('storage', callback);
-      return () => window.removeEventListener('storage', callback);
-    },
-    getSnapshot,
-    () => []
-  );
-};
+  useEffect(() => {
+    const loadProjects = () => {
+      try {
+        const stored = localStorage.getItem('projects');
+        if (stored) {
+          setProjects(JSON.parse(stored));
+        } else {
+          setProjects([]);
+        }
+      } catch (err) {
+        console.error('Failed to load projects:', err);
+        setProjects([]);
+      }
+    };
+
+    loadProjects();
+
+    // Listen for changes from other tabs
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'projects') loadProjects();
+    };
+
+    // Listen for same-tab updates
+    const handleCustomUpdate = () => loadProjects();
+
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('projectsUpdated', handleCustomUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('projectsUpdated', handleCustomUpdate);
+    };
+  }, []);
+
+  return projects;
+}
 
 const ProjectDetails = () => {
   const params = useParams();
   const slug = params?.slug as string;
-  const router = useRouter()
+  const router = useRouter();
 
   const storedProjects = useLocalStorageProjects();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isMounted] = useState(() => typeof window !== 'undefined');
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [slug]);
 
   const project = useMemo(
-    () => storedProjects.find((p) => toSlug(p.Title) === slug) ?? null,
+    () => storedProjects.find((p: Project) => toSlug(p.Title) === slug) ?? null,
     [storedProjects, slug]
   );
 
@@ -156,12 +181,23 @@ const ProjectDetails = () => {
         ...project,
         Features: project.Features || [],
         TechStack: project.TechStack || [],
-        Github: project.Github || 'https://github.com/EkiZR',
+        Github: project.Github || "https://github.com/MOSES303O",
       }
     : null;
 
+  if (!isMounted) {
+    return <div className="min-h-screen bg-[#030014]" />;
+  }
+
   if (!enhancedProject) {
-    return <div>Project not found</div>;
+    return (
+      <div className="min-h-screen bg-[#030014] flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-white mb-4">Project not found</h1>
+          <p className="text-gray-400">The project you are looking for does not exist.</p>
+        </div>
+      </div>
+    );
   }
 
   const handleGithubClick = (githubLink?: string): boolean => {
@@ -180,7 +216,8 @@ const ProjectDetails = () => {
     return true;
   };
 
-  //const projectUrl = `https://ekizr.com/project/${toSlug(project.Title)}`;
+  // ... rest of your return JSX (keep it as is)
+  //const projectUrl = `https://ochiengs.com/project/${toSlug(project.Title)}`;
 
   return (
     <div className="min-h-screen bg-[#030014] px-[2%] sm:px-0 relative overflow-hidden">
@@ -267,7 +304,7 @@ const ProjectDetails = () => {
                 </h3>
                 {enhancedProject.TechStack && enhancedProject.TechStack.length > 0 ? (
                   <div className="flex flex-wrap gap-2 md:gap-3">
-                    {enhancedProject.TechStack.map((tech, index) => (
+                    {enhancedProject.TechStack.map((tech: string, index: number) => (
                       <TechBadge key={index} tech={tech} />
                     ))}
                   </div>
@@ -306,7 +343,7 @@ const ProjectDetails = () => {
                 </h3>
                 {enhancedProject.Features && enhancedProject.Features.length > 0 ? (
                   <ul className="list-none space-y-2">
-                    {enhancedProject.Features.map((feature, index) => (
+                    {enhancedProject.Features.map((feature: string, index: number) => (
                       <FeatureItem key={index} feature={feature} />
                     ))}
                   </ul>

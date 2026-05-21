@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface ProtectedRouteProps {
@@ -8,50 +8,56 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const [allowed, setAllowed] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAllowed, setIsAllowed] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    const checkAccess = async () => {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 600));
-
-      // === MOCK AUTH LOGIC ===
+    const checkAccess = () => {
       const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
       const userRole = localStorage.getItem('userRole');
 
-      // For demo purposes - you can change this to test
-      const hasAdminAccess = isLoggedIn && userRole === 'admin';
+      const hasAccess = isLoggedIn && userRole === 'admin';
 
-      setAllowed(hasAdminAccess);
+      setIsAllowed(hasAccess);
+      setIsLoading(false);
+
+      // Optional: Auto redirect to login if not allowed
+      if (!hasAccess) {
+        router.replace('/login');   // replace = no back button history
+      }
     };
 
-    checkAccess();
-  }, []);
+    // Small delay for better UX (avoid flash)
+    const timer = setTimeout(checkAccess, 400);
 
-  // Still loading
-  if (allowed === null) {
+    return () => clearTimeout(timer);
+  }, [router]);
+
+  // Loading State
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#030014]">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-8 h-8 border-4 border-t-transparent border-blue-500 rounded-full animate-spin" />
-          <p className="text-gray-400">Checking access...</p>
+          <div className="w-8 h-8 border-4 border-t-transparent border-indigo-500 rounded-full animate-spin" />
+          <p className="text-gray-400 text-sm">Verifying access...</p>
         </div>
       </div>
     );
   }
 
-  // Not allowed → Redirect to login
-  if (!allowed) {
-    // You can also use router.replace('/login') for client-side redirect
+  // Not Allowed (fallback in case redirect fails)
+  if (!isAllowed) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#030014]">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-red-400 mb-2">Access Denied</h2>
-          <p className="text-gray-400 mb-6">You dont have permission to view this page.</p>
+        <div className="text-center max-w-md px-6">
+          <h2 className="text-3xl font-bold text-red-400 mb-3">Access Denied</h2>
+          <p className="text-gray-400 mb-8">
+            You dont have permission to access this dashboard.
+          </p>
           <button
             onClick={() => router.push('/login')}
-            className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors"
+            className="px-8 py-3 bg-white text-black rounded-2xl font-medium hover:bg-gray-200 transition-colors"
           >
             Go to Login
           </button>
@@ -60,7 +66,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     );
   }
 
-  // Allowed → Show protected content
+  // Allowed → Render children
   return <>{children}</>;
 };
 

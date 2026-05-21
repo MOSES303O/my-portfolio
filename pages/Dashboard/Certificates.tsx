@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Award, Upload, Trash2, ImageIcon, Plus } from 'lucide-react';
+import React, { useState,  } from 'react';
+import { Award, Trash2, ImageIcon, Plus } from 'lucide-react';
 import Image from 'next/image';
 
 interface Certificate {
@@ -62,23 +62,17 @@ const CertCard = ({ cert, onDelete }: { cert: Certificate; onDelete: (id: number
 };
 
 export default function Certificates() {
-  const [certs, setCerts] = useState<Certificate[]>([]);
+  const [certs,setCerts] = useState<Certificate[]>([
+    { id: 1, Img: '/jinx.jpg', created_at: new Date().toISOString() },
+    { id: 2, Img: '/jinxx.bmp', created_at: new Date().toISOString() },
+    { id: 3, Img: '/jinxxx.jpg', created_at: new Date().toISOString() },
+  ]);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading] = useState(true);
 
-  // Mock initial certificates
-  useEffect(() => {
-    const mockData: Certificate[] = [
-      { id: 1, Img: '/certificates/cert1.jpg', created_at: new Date().toISOString() },
-      { id: 2, Img: '/certificates/cert2.jpg', created_at: new Date().toISOString() },
-      { id: 3, Img: '/certificates/cert3.jpg', created_at: new Date().toISOString() },
-    ];
-    setCerts(mockData);
-    setLoading(false);
-  }, []);
 
   const handleFile = (selectedFile: File | null) => {
     if (!selectedFile) return;

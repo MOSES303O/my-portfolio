@@ -27,16 +27,19 @@ export default function LandingPage() {
       </AnimatePresence>
 
       {!showWelcome && (
-        <>
+        <div className="flex min-h-screen flex-col w-full">
           <Navbar />
-          <Home />
-          <About />
-          <Suspense fallback={<div className="h-20" />}>
-            <Portfolio />
-            <ContactPage />
-          </Suspense>
+          {/* MAIN CONTENT WRAPPER - This is the key fix */}
+          <main className="flex-1 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 xl:px-16">
+            <Home />
+            <About />
+            <Suspense fallback={<div className="h-20" />}>
+              <Portfolio />
+              <ContactPage />
+            </Suspense>
+          </main>
           <Footer />
-        </>
+        </div>
       )}
     </>
   );

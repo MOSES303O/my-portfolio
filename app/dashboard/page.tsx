@@ -1,8 +1,11 @@
 'use client';
 
-import { useState,useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { FolderGit2, Award, MessageSquare, LogOut, LayoutDashboard, Menu } from 'lucide-react';
+import { 
+  FolderGit2, Award, MessageSquare, LogOut, 
+  LayoutDashboard, Menu 
+} from 'lucide-react';
 
 import Projects from '@/pages/dashboard/Projects';
 import Certificates from '@/pages/dashboard/Certificates';
@@ -13,7 +16,7 @@ const NAV_ITEMS = [
   { id: 'certificates', label: 'Certificates', icon: Award },
   { id: 'comments', label: 'Comments', icon: MessageSquare },
 ];
-// ✅ SidebarContent moved OUTSIDE the component
+
 const SidebarContent = ({ 
   currentTab, 
   onNavClick, 
@@ -83,6 +86,7 @@ export default function Dashboard() {
   const pathname = usePathname() || '';   // ← Fixed: Added fallback
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Get current tab from URL
   const currentTab = pathname.split('/').pop() || 'projects';
 
   const handleNavClick = useCallback((id: string) => {
@@ -96,8 +100,6 @@ export default function Dashboard() {
     router.push('/login');
   }, [router]);
 
-  
-
   return (
     <div className="flex h-screen bg-[#030014] text-white overflow-hidden">
       {/* Mobile Overlay */}
@@ -108,7 +110,7 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Sidebar - Desktop */}
+      {/* Desktop Sidebar */}
       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-white/10 bg-white/5 backdrop-blur-xl">
         <SidebarContent 
           currentTab={currentTab} 
@@ -117,7 +119,7 @@ export default function Dashboard() {
         />
       </aside>
 
-      {/* Sidebar - Mobile Drawer */}
+      {/* Mobile Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-30 w-64 flex flex-col border-r border-white/10 bg-[#0a0a1a] backdrop-blur-xl transition-transform duration-300 lg:hidden ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
@@ -130,7 +132,7 @@ export default function Dashboard() {
         />
       </aside>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
         {/* Mobile Top Bar */}
         <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/5 backdrop-blur-xl shrink-0">

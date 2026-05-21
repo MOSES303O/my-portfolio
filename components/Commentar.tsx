@@ -18,9 +18,9 @@ interface CommentType {
 // Mock Pinned Comment
 const mockPinnedComment: CommentType = {
   id: 999,
-  user_name: "Eki Zulfar Rachman",
+  user_name: "Ochieng Moses",
   content: "Thank you for visiting my portfolio! Feel free to leave a comment and share your thoughts.",
-  profile_image: "/Photo.jpg",
+  profile_image: "/ochi.jpg",
   created_at: new Date().toISOString(),
   is_pinned: true,
 };

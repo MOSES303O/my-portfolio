@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
-  Plus, Trash2, Upload, FolderGit2, X, ImageIcon, 
-  ExternalLink, Github, Pencil 
+  Plus, Trash2,FolderGit2, X, ImageIcon, 
+  ExternalLink,Pencil 
 } from 'lucide-react';
+import { FaGithub} from "react-icons/fa6";
 import Image from 'next/image';
 
 interface Project {
@@ -17,6 +18,14 @@ interface Project {
   Link?: string;
   Github?: string;
   created_at?: string;
+}
+interface ProjectFormData {
+  Title: string;
+  Description: string;
+  TechStack: string;
+  Features: string;
+  Link: string;
+  Github: string;
 }
 
 const Card = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
@@ -44,6 +53,35 @@ const SkeletonCard = () => (
     </div>
   </div>
 );
+const InputField = ({
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  required = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  type?: string;
+  required?: boolean;
+}) => (
+  <div className="space-y-1.5">
+    <label className="text-xs text-indigo-300/70 uppercase tracking-wider font-medium">
+      {label}
+    </label>
+    <input
+      type={type}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      required={required}
+      className="w-full bg-[#0d0d22] border border-white/10 rounded-xl px-4 py-2.5 text-gray-200 placeholder-gray-600 text-sm outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/20 transition-all"
+    />
+  </div>
+);
 
 const ProjectCard = ({ 
   project, 
@@ -63,6 +101,8 @@ const ProjectCard = ({
           <div className="relative w-full aspect-video rounded-xl mb-4 overflow-hidden bg-white/5 border border-white/10">
             {!imgLoaded && <div className="absolute inset-0 bg-white/5 animate-pulse" />}
             <Image
+            width={300}
+            height={200}
               src={project.Img}
               alt={project.Title}
               onLoad={() => setImgLoaded(true)}
@@ -103,7 +143,7 @@ const ProjectCard = ({
             )}
             {project.Github && (
               <a href={project.Github} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg border border-white/10 hover:bg-white/5 transition-colors">
-                <Github className="w-4 h-4" />
+                <FaGithub className="w-4 h-4" />
               </a>
             )}
           </div>
@@ -152,7 +192,13 @@ const ProjectForm = ({
   onCancel, 
   submitLabel = "Save Project", 
   uploading 
-}: any) => {
+}: {
+  initial?: Project | null;
+  onSubmit: (form: ProjectFormData, file: File | null) => void;
+  onCancel: () => void;
+  submitLabel?: string;
+  uploading: boolean;
+}) => {
   const [form, setForm] = useState({
     Title: initial?.Title || "",
     Description: initial?.Description || "",
@@ -247,39 +293,33 @@ const ProjectForm = ({
 };
 
 export default function Projects() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState<Project[]>([
+    {
+      id: 1,
+      Title: "E-Commerce Platform",
+      Description: "Modern full-stack e-commerce with admin dashboard and payment integration.",
+      Img: "/jinx.jpg",
+      TechStack: ["React", "Tailwind", "Node.js"],
+      Link: "https://example.com",
+      Github: "https://github.com",
+    },
+    {
+      id: 2,
+      Title: "TaskFlow - Project Management",
+      Description: "Real-time collaborative task management application.",
+      Img: "/jinxxx.jpg",
+      TechStack: ["Next.js", "Supabase", "Framer Motion"],
+      Link: "https://example.com",
+      Github: "https://github.com",
+    },
+  ]);
+
+  const [loading] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [editProject, setEditProject] = useState<Project | null>(null);
   const [uploading, setUploading] = useState(false);
 
-  // Mock Data
-  useEffect(() => {
-    const mockProjects: Project[] = [
-      {
-        id: 1,
-        Title: "E-Commerce Platform",
-        Description: "Modern full-stack e-commerce with admin dashboard and payment integration.",
-        Img: "/projects/project1.jpg",
-        TechStack: ["React", "Tailwind", "Node.js"],
-        Link: "https://example.com",
-        Github: "https://github.com",
-      },
-      {
-        id: 2,
-        Title: "TaskFlow - Project Management",
-        Description: "Real-time collaborative task management application.",
-        Img: "/projects/project2.jpg",
-        TechStack: ["Next.js", "Supabase", "Framer Motion"],
-        Link: "https://example.com",
-        Github: "https://github.com",
-      },
-    ];
-    setProjects(mockProjects);
-    setLoading(false);
-  }, []);
-
-  const handleCreate = (form: any, file: File | null) => {
+  const handleCreate = (form: ProjectFormData, file: File | null) => {
     setUploading(true);
     setTimeout(() => {
       const newProject: Project = {
@@ -298,7 +338,7 @@ export default function Projects() {
     }, 800);
   };
 
-  const handleEdit = (form: any, file: File | null) => {
+  const handleEdit = (form:ProjectFormData, file: File | null) => {
     if (!editProject) return;
     setUploading(true);
     setTimeout(() => {

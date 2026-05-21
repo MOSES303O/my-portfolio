@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Menu, X } from 'lucide-react';
+import Link from "next/link";
 
 interface NavItem {
   href: string;
@@ -85,7 +86,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed w-full top-0 z-50 transition-all duration-500 ${
+      className={`fixed w-full top-0 z-60 transition-all duration-500 ${
         isOpen
           ? "bg-[#030014]"
           : scrolled
@@ -93,24 +94,24 @@ const Navbar = () => {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto px-[5%] lg:px-[10%]">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="relative flex h-16 items-center justify-between">
           {/* Logo */}
-          <div className="shrink-0">
-            <a
+          <div className="left-8 relative z-20">
+            <Link
               href="#Home"
               onClick={(e) => scrollToSection(e, "#Home")}
-              className="text-2xl font-bold bg-linear-to-r from-[#a855f7] to-[#6366f1] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+              className="text-2xl font-bold bg-linear-to-r from-[#6366f1] to-[#a855f7] bg-clip-text text-transparent hover:opacity-90 transition-opacity"
             >
-              Ekizr
-            </a>
+              Ochiengs
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="flex items-center space-x-8">
+          <div className="hidden md:flex items-center justify-center flex-1">
+            <div className="flex items-center gap-10">
               {navItems.map((item) => (
-                <a
+                <Link
                   key={item.label}
                   href={item.href}
                   onClick={(e) => scrollToSection(e, item.href)}
@@ -132,13 +133,13 @@ const Navbar = () => {
                         : "scale-x-0 group-hover:scale-x-100"
                     }`}
                   />
-                </a>
+                </Link>
               ))}
             </div>
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          <div className="md:hidden pr-2">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className={`relative p-2 text-[#e2d3fd] hover:text-white transition-transform duration-300 ${
@@ -159,7 +160,7 @@ const Navbar = () => {
       >
         <div className="px-6 py-8 space-y-2 bg-[#030014]">
           {navItems.map((item, index) => (
-            <a
+            <Link
               key={item.label}
               href={item.href}
               onClick={(e) => scrollToSection(e, item.href)}
@@ -173,7 +174,7 @@ const Navbar = () => {
               }}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </div>
       </div>

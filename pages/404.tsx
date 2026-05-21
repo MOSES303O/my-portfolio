@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Home, ArrowLeft } from 'lucide-react';
 
@@ -29,10 +28,10 @@ export default function NotFoundPage() {
         {/* Message */}
         <div className="mb-8">
           <h2 className="text-3xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
-            Oops! Halaman Tidak Ditemukan
+            Oops! Page Not Found
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
-            Halaman yang Anda cari mungkin telah dipindahkan, dihapus, atau tidak pernah ada.
+            The page you are looking for does not exist or has been moved.
           </p>
         </div>
 
@@ -50,7 +49,7 @@ export default function NotFoundPage() {
             className="flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-800 text-white rounded-xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-95"
           >
             <ArrowLeft size={20} />
-            Kembali
+            Back
           </button>
 
           <button
@@ -58,7 +57,7 @@ export default function NotFoundPage() {
             className="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-95"
           >
             <Home size={20} />
-            Beranda
+            Home
           </button>
         </div>
       </div>

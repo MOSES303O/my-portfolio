@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
-const AnimatedBackground = () => {
-  const blobRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const initialPositions = [
+const initialPositions = [
   { x: -4, y: 0 },
   { x: -4, y: 0 },
   { x: 20, y: -8 },
   { x: 20, y: -8 },
 ];
+const AnimatedBackground = () => {
+  const blobRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   useEffect(() => {
     let currentScroll = 0;
     let requestId: number;
@@ -48,7 +48,7 @@ const AnimatedBackground = () => {
       window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(requestId);
     };
-  }, []);
+  },[]);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">

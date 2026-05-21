@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useEffect, memo, useMemo } from 'react';
+import React, { useEffect, memo, useMemo,useState } from 'react';
 import { FileText, Code, Award, Globe, ArrowUpRight, Sparkles } from 'lucide-react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import Image from 'next/image';
 
 interface StatCardProps {
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   color: string;
   value: number;
   label: string;
@@ -20,7 +21,7 @@ const Header = memo(() => (
   <div className="text-center lg:mb-8 mb-2 px-[5%]">
     <div className="inline-block relative group">
       <h2 
-        className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]" 
+        className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradilinear from-[#6366f1] to-[#a855f7]" 
         data-aos="zoom-in-up"
         data-aos-duration="600"
       >
@@ -38,33 +39,35 @@ const Header = memo(() => (
     </p>
   </div>
 ));
+Header.displayName = "Header";
 
 const ProfileImage = memo(() => (
   <div className="flex justify-end items-center sm:p-12 sm:py-0 sm:pb-0 p-0 py-2 pb-2">
     <div className="relative group" data-aos="fade-up" data-aos-duration="1000">
-      <div className="absolute -inset-6 opacity-[25%] z-0 hidden sm:block">
-        <div className="absolute inset-0 bg-gradient-to-r from-violet-600 via-indigo-500 to-purple-600 rounded-full blur-2xl animate-spin-slower" />
-        <div className="absolute inset-0 bg-gradient-to-l from-fuchsia-500 via-rose-500 to-pink-600 rounded-full blur-2xl animate-pulse-slow opacity-50" />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-600 via-cyan-500 to-teal-400 rounded-full blur-2xl animate-float opacity-50" />
+      <div className="absolute -inset-6 opacity-25% z-0 hidden sm:block">
+        <div className="absolute inset-0 bg-linear-to-r from-violet-600 via-indigo-500 to-purple-600 rounded-full blur-2xl animate-spin-slower" />
+        <div className="absolute inset-0 bg-linear-to-l from-fuchsia-500 via-rose-500 to-pink-600 rounded-full blur-2xl animate-pulse-slow opacity-50" />
+        <div className="absolute inset-0 bg-linear-to-t from-blue-600 via-cyan-500 to-teal-400 rounded-full blur-2xl animate-float opacity-50" />
       </div>
 
       <div className="relative">
         <div className="w-72 h-72 sm:w-80 sm:h-80 rounded-full overflow-hidden shadow-[0_0_40px_rgba(120,119,198,0.3)] transform transition-all duration-700 group-hover:scale-105">
           <div className="absolute inset-0 border-4 border-white/20 rounded-full z-20 transition-all duration-700 group-hover:border-white/40 group-hover:scale-105" />
+
+          <div className="absolute inset-0 bg-linear-to-t from-purple-500/20 via-transparent to-blue-500/20 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 hidden sm:block" />
           
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40 z-10 transition-opacity duration-700 group-hover:opacity-0 hidden sm:block" />
-          <div className="absolute inset-0 bg-gradient-to-t from-purple-500/20 via-transparent to-blue-500/20 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 hidden sm:block" />
-          
-          <img
-            src="/Photo.jpg"
-            alt="Eki Zulfar Rachman"
+          <Image
+            src="/ochi.jpg"
+            width={400}          
+            height={400}
+            alt="ochieng moses"
             className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-2"
             loading="lazy"
           />
 
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-700 z-20 hidden sm:block">
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-            <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-white/10 to-transparent transform translate-y-full group-hover:-translate-y-full transition-transform duration-1000 delay-100" />
+            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            <div className="absolute inset-0 bg-linear-to-bl from-transparent via-white/10 to-transparent transform translate-y-full group-hover:-translate-y-full transition-transform duration-1000 delay-100" />
             <div className="absolute inset-0 rounded-full border-8 border-white/10 scale-0 group-hover:scale-100 transition-transform duration-700 animate-pulse-slow" />
           </div>
         </div>
@@ -72,11 +75,12 @@ const ProfileImage = memo(() => (
     </div>
   </div>
 ));
+ProfileImage.displayName = "ProfileImage";
 
 const StatCard = memo(({ icon: Icon, color, value, label, description, animation }: StatCardProps) => (
   <div data-aos={animation} data-aos-duration={1300} className="relative group">
     <div className="relative z-10 bg-gray-900/50 backdrop-blur-lg rounded-2xl p-6 border border-white/10 overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl h-full flex flex-col justify-between">
-      <div className={`absolute -z-10 inset-0 bg-gradient-to-br ${color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`} />
+      <div className={`absolute -z-10 inset-0 bg-linear-to-br ${color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`} />
       
       <div className="flex items-center justify-between mb-4">
         <div className="w-16 h-16 rounded-full flex items-center justify-center bg-white/10 transition-transform group-hover:rotate-6">
@@ -95,25 +99,37 @@ const StatCard = memo(({ icon: Icon, color, value, label, description, animation
     </div>
   </div>
 ));
+StatCard.displayName = "StatCard";
 
 // ==================== MAIN COMPONENT ====================
 
 const AboutPage = () => {
-  const { totalProjects, totalCertificates, YearExperience } = useMemo(() => {
-    const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
-    const storedCertificates = JSON.parse(localStorage.getItem("certificates") || "[]");
-    
-    const startDate = new Date("2021-11-06");
-    const today = new Date();
-    const experience = today.getFullYear() - startDate.getFullYear() -
-      (today < new Date(today.getFullYear(), startDate.getMonth(), startDate.getDate()) ? 1 : 0);
+  // ✅ Use lazy initializer - no setState in effect
+  const [stats] = useState(() => {
+    // This runs only once on client
+    if (typeof window === 'undefined') {
+      return { totalProjects: 0, totalCertificates: 0, YearExperience: 0 };
+    }
 
-    return {
-      totalProjects: storedProjects.length,
-      totalCertificates: storedCertificates.length,
-      YearExperience: experience,
-    };
-  }, []);
+    try {
+      const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
+      const storedCertificates = JSON.parse(localStorage.getItem("certificates") || "[]");
+      
+      const startDate = new Date("2021-11-06");
+      const today = new Date();
+      const experience = today.getFullYear() - startDate.getFullYear() -
+        (today < new Date(today.getFullYear(), startDate.getMonth(), startDate.getDate()) ? 1 : 0);
+
+      return {
+        totalProjects: storedProjects.length,
+        totalCertificates: storedCertificates.length,
+        YearExperience: experience,
+      };
+    } catch (error) {
+      console.error("Error loading stats:", error);
+      return { totalProjects: 0, totalCertificates: 0, YearExperience: 0 };
+    }
+  });
 
   useEffect(() => {
     AOS.init({ once: false });
@@ -132,7 +148,7 @@ const AboutPage = () => {
     {
       icon: Code,
       color: "from-[#6366f1] to-[#a855f7]",
-      value: totalProjects,
+      value: stats.totalProjects,
       label: "Total Projects",
       description: "Innovative web solutions crafted",
       animation: "fade-right",
@@ -140,7 +156,7 @@ const AboutPage = () => {
     {
       icon: Award,
       color: "from-[#a855f7] to-[#6366f1]",
-      value: totalCertificates,
+      value: stats.totalCertificates,
       label: "Certificates",
       description: "Professional skills validated",
       animation: "fade-up",
@@ -148,12 +164,14 @@ const AboutPage = () => {
     {
       icon: Globe,
       color: "from-[#6366f1] to-[#a855f7]",
-      value: YearExperience,
+      value: stats.YearExperience,
       label: "Years of Experience",
       description: "Continuous learning journey",
       animation: "fade-left",
     },
-  ], [totalProjects, totalCertificates, YearExperience]);
+  ], [stats]);
+
+  // ... rest of your component remains the same
 
   return (
     <div
@@ -182,7 +200,7 @@ const AboutPage = () => {
                 data-aos-duration="1300"
                 itemProp="name"
               >
-                Eki Zulfar Rachman
+              Moses Ochieng 
               </span>
             </h2>
             
@@ -191,8 +209,7 @@ const AboutPage = () => {
               data-aos="fade-right"
               data-aos-duration="1500"
             >
-              Saya adalah mahasiswa Teknik Informatika yang berfokus pada pengembangan Front-End. 
-              Saya berfokus pada penciptaan pengalaman digital yang menarik dan selalu berupaya memberikan solusi terbaik dalam setiap proyek yang saya kerjakan.
+              I am a Mathematics And Computer Science Graduate focusing on software development. I focus on creating engaging digital experiences and always strive to provide the best solution in every project I work on.
             </p>
 
             {/* Quote */}
